@@ -155,8 +155,9 @@ class _PaymentsPageState extends State<PaymentsPage>
                       );
                       _issuePayment(payment).whenComplete(() {
                         Navigator.pop(context);
-                        if (_currentUsername ==
-                            accountUsernameTextController.text) {
+                        if (_currentUsername != null &&
+                            _currentUsername ==
+                                accountUsernameTextController.text) {
                           setState(() {
                             _payments = _fetchPayments(_currentUsername!);
                           });

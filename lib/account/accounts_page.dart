@@ -87,57 +87,77 @@ class _AccountsPageState extends State<AccountsPage>
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          final usernameTextController = TextEditingController();
-          final firstNameTextController = TextEditingController();
-          final lastNameTextController = TextEditingController();
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: const Text('Create account'),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    TextField(
-                      controller: usernameTextController,
-                      decoration: const InputDecoration(hintText: 'Username'),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            heroTag: 'refreshAccounts',
+            onPressed: () {
+              setState(() {
+                _accounts = _fetchAccounts();
+              });
+            },
+            tooltip: 'Refresh',
+            child: const Icon(Icons.refresh),
+          ),
+          const SizedBox(height: 10),
+          FloatingActionButton(
+            heroTag: 'addAccount',
+            onPressed: () {
+              final usernameTextController = TextEditingController();
+              final firstNameTextController = TextEditingController();
+              final lastNameTextController = TextEditingController();
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: const Text('Create account'),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        TextField(
+                          controller: usernameTextController,
+                          decoration:
+                              const InputDecoration(hintText: 'Username'),
+                        ),
+                        TextField(
+                          controller: firstNameTextController,
+                          decoration:
+                              const InputDecoration(hintText: 'First name'),
+                        ),
+                        TextField(
+                          controller: lastNameTextController,
+                          decoration:
+                              const InputDecoration(hintText: 'Last name'),
+                        ),
+                      ],
                     ),
-                    TextField(
-                      controller: firstNameTextController,
-                      decoration: const InputDecoration(hintText: 'First name'),
-                    ),
-                    TextField(
-                      controller: lastNameTextController,
-                      decoration: const InputDecoration(hintText: 'Last name'),
-                    ),
-                  ],
-                ),
-                actions: [
-                  TextButton(
-                    child: const Text("Create"),
-                    onPressed: () {
-                      final account = AccountDto(
-                        username: usernameTextController.text,
-                        firstName: firstNameTextController.text,
-                        lastName: lastNameTextController.text,
-                      );
-                      _createAccount(account).whenComplete(() {
-                        setState(() {
-                          _accounts = _fetchAccounts();
-                        });
-                        Navigator.pop(context);
-                      });
-                    },
-                  )
-                ],
+                    actions: [
+                      TextButton(
+                        child: const Text("Create"),
+                        onPressed: () {
+                          final account = AccountDto(
+                            username: usernameTextController.text,
+                            firstName: firstNameTextController.text,
+                            lastName: lastNameTextController.text,
+                          );
+                          _createAccount(account).whenComplete(() {
+                            setState(() {
+                              _accounts = _fetchAccounts();
+                            });
+                            Navigator.pop(context);
+                          });
+                        },
+                      )
+                    ],
+                  );
+                },
               );
             },
-          );
-        },
-        tooltip: 'Create account',
-        child: const Icon(Icons.add),
+            tooltip: 'Create account',
+            child: const Icon(Icons.add),
+          ),
+        ],
       ),
     );
   }
