@@ -1,5 +1,3 @@
-import 'package:json_annotation/json_annotation.dart';
-
 class PaymentDto {
   final String transactionId;
   final String accountUsername;
@@ -18,14 +16,14 @@ class PaymentDto {
       transactionId: json['transactionId'],
       accountUsername: json['accountUsername'],
       amount: json['amount'],
-      status: json['status'],
+      status: _PaymentStatusDtoMapping.fromString(json['status']),
     );
   }
 }
 
-enum PaymentStatusDto {
-  @JsonValue('ISSUED')
-  issued,
-  @JsonValue('SETTLED')
-  settled
+enum PaymentStatusDto { issued, settled }
+
+extension _PaymentStatusDtoMapping on PaymentStatusDto {
+  static PaymentStatusDto fromString(String name) =>
+      PaymentStatusDto.values.byName(name.toLowerCase());
 }

@@ -28,24 +28,6 @@ class _AccountsPageState extends State<AccountsPage>
     });
   }
 
-  Future<List<AccountDto>> _fetchAccounts() async {
-    final response =
-        await http.get(Uri.parse('http://localhost:8080/accounts'));
-    if (response.statusCode == HttpStatus.ok) {
-      List jsonResponse = jsonDecode(utf8.decode(response.bodyBytes));
-      return jsonResponse
-          .map((account) => AccountDto.fromJson(account))
-          .toList();
-    } else {
-      Fluttertoast.showToast(
-        msg: 'Failed to load accounts',
-        timeInSecForIosWeb: 5,
-        webPosition: 'left',
-      );
-      throw Exception('Failed to fetch accounts from API');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -158,6 +140,24 @@ class _AccountsPageState extends State<AccountsPage>
         child: const Icon(Icons.add),
       ),
     );
+  }
+
+  Future<List<AccountDto>> _fetchAccounts() async {
+    final response =
+        await http.get(Uri.parse('http://localhost:8080/accounts'));
+    if (response.statusCode == HttpStatus.ok) {
+      List jsonResponse = jsonDecode(utf8.decode(response.bodyBytes));
+      return jsonResponse
+          .map((account) => AccountDto.fromJson(account))
+          .toList();
+    } else {
+      Fluttertoast.showToast(
+        msg: 'Failed to load accounts',
+        timeInSecForIosWeb: 5,
+        webPosition: 'left',
+      );
+      throw Exception('Failed to fetch accounts from API');
+    }
   }
 
   Future<void> _createAccount(AccountDto account) async {
