@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  soa-frontend:
+    container_name: soa-frontend
+    image: soa-frontend:0.0.1
+    ports:
+      - "9080:80"
+    networks:
+      - soa
+    environment:
+      GATEWAY_URL: http://gateway:8080
+
+networks:
+  soa:
+    external: true

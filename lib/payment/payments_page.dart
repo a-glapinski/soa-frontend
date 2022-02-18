@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import 'package:soa_frontend/env.dart';
 import 'package:soa_frontend/payment/dto/issue_payment_dto.dart';
 import 'package:soa_frontend/payment/dto/payment_dto.dart';
 
@@ -180,7 +181,7 @@ class _PaymentsPageState extends State<PaymentsPage>
     final queryParameters = {'accountUsername': accountUsername};
     final response = await http.get(
       Uri.parse(
-        'http://localhost:8080/payments',
+        '$gatewayUrl/payments',
       ).replace(queryParameters: queryParameters),
     );
     if (response.statusCode == HttpStatus.ok) {
@@ -204,7 +205,7 @@ class _PaymentsPageState extends State<PaymentsPage>
       'amount': issuePaymentDto.amount.toString()
     });
     final response = await http.post(
-      Uri.parse('http://localhost:8080/payments/issue'),
+      Uri.parse('$gatewayUrl/payments/issue'),
       headers: {"Content-Type": "application/json"},
       body: body,
     );
@@ -223,7 +224,7 @@ class _PaymentsPageState extends State<PaymentsPage>
     final queryParameters = {'transactionId': transactionId};
     final response = await http.put(
       Uri.parse(
-        'http://localhost:8080/payments/settle',
+        '$gatewayUrl/payments/settle',
       ).replace(queryParameters: queryParameters),
     );
     if (response.statusCode != HttpStatus.ok) {

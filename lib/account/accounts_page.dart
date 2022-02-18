@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:soa_frontend/account/dto/account_dto.dart';
+import 'package:soa_frontend/env.dart';
 
 class AccountsPage extends StatefulWidget {
   const AccountsPage({Key? key}) : super(key: key);
@@ -163,8 +164,7 @@ class _AccountsPageState extends State<AccountsPage>
   }
 
   Future<List<AccountDto>> _fetchAccounts() async {
-    final response =
-        await http.get(Uri.parse('http://localhost:8080/accounts'));
+    final response = await http.get(Uri.parse('$gatewayUrl/accounts'));
     if (response.statusCode == HttpStatus.ok) {
       List jsonResponse = jsonDecode(utf8.decode(response.bodyBytes));
       return jsonResponse
@@ -187,7 +187,7 @@ class _AccountsPageState extends State<AccountsPage>
       'lastName': account.lastName
     });
     final response = await http.post(
-      Uri.parse('http://localhost:8080/accounts'),
+      Uri.parse('$gatewayUrl/accounts'),
       headers: {"Content-Type": "application/json"},
       body: body,
     );
@@ -203,7 +203,7 @@ class _AccountsPageState extends State<AccountsPage>
 
   Future<void> _deleteAccount(AccountDto account) async {
     final response = await http.delete(
-      Uri.parse('http://localhost:8080/accounts/${account.username}'),
+      Uri.parse('$gatewayUrl/accounts/${account.username}'),
     );
     if (response.statusCode == HttpStatus.noContent) {
       Fluttertoast.showToast(
